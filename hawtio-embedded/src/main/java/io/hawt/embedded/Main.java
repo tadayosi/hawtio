@@ -18,18 +18,21 @@
 package io.hawt.embedded;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Slf4jLog;
-import org.eclipse.jetty.webapp.WebAppContext;
+import io.undertow.Undertow;
+import io.undertow.servlet.Servlets;
+import io.undertow.servlet.api.DeploymentInfo;
+import io.undertow.servlet.api.DeploymentManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * A simple way to run hawtio embedded inside a JVM by booting up a Jetty server
+ * A simple way to run hawtio embedded inside a JVM by booting up an Undertow server
  */
 public class Main {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+
     private Options options;
     private boolean welcome = true;
 
@@ -71,11 +74,21 @@ public class Main {
     }
 
     public void run(boolean join) throws Exception {
-        System.setProperty("org.eclipse.jetty.util.log.class", Slf4jLog.class.getName());
-        Slf4jLog log = new Slf4jLog("jetty");
-        Log.setLog(log);
 
-        Server server = new Server(options.getPort());
+        DeploymentInfo servletBuilder = Servlets.deployment()
+            .setClassLoader(getClass().getClassLoader())
+            .setContextPath(options.getContextPath());
+        DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);
+        manager.deploy();
+        
+        String war = findWar(options.getWarLocation());
+        if (war == null) {
+            war = options.getWar();
+        }
+        if (war == null) {
+            throw new IllegalArgumentException("No war or warLocation options set!");
+        }
+
 
         HandlerCollection handlers = new HandlerCollection();
         handlers.setServer(server);
@@ -84,28 +97,21 @@ public class Main {
         WebAppContext webapp = new WebAppContext();
         webapp.setServer(server);
         webapp.setContextPath(options.getContextPath());
-        String war = findWar(options.getWarLocation());
-        if (war == null) {
-            war = options.getWar();
-        }
-        if (war == null) {
-            throw new IllegalArgumentException("No war or warLocation options set!");
-        }
         webapp.setWar(war);
         webapp.setParentLoaderPriority(true);
         webapp.setLogUrlOnStart(true);
         webapp.setExtraClasspath(options.getExtraClassPath());
 
-        // lets set a temporary directory so jetty doesn't bork if some process zaps /tmp/*
+        // lets set a temporary directory so Undertow isn't borked if some process zaps /tmp/*
         String homeDir = System.getProperty("user.home", ".") + System.getProperty("hawtio.dirname", "/.hawtio");
         String tempDirPath = homeDir + "/tmp";
         File tempDir = new File(tempDirPath);
         tempDir.mkdirs();
-        log.info("using temp directory for jetty: " + tempDir.getPath());
+        LOG.info("using temp directory for Undertow: {}", tempDir.getPath());
         webapp.setTempDirectory(tempDir);
 
         // check for 3rd party plugins before we add hawtio, so they are initialized before hawtio
-        findThirdPartyPlugins(log, handlers, tempDir);
+        findThirdPartyPlugins(handlers, tempDir);
 
         // add hawtio
         handlers.addHandler(webapp);
@@ -117,6 +123,9 @@ public class Main {
         }
 
         System.out.println("About to start hawtio " + war);
+        Undertow server = Undertow.builder()
+            .addHttpListener(options.getPort(), "0.0.0.0")
+            .build();
         server.start();
 
         if (welcome) {
@@ -136,57 +145,54 @@ public class Main {
         }
     }
 
-    protected void findThirdPartyPlugins(Slf4jLog log, HandlerCollection handlers, File tempDir) {
+    protected void findThirdPartyPlugins(HandlerCollection handlers, File tempDir) {
         File dir = new File(options.getPlugins());
-        if (dir.exists() && dir.isDirectory()) {
+        if (!dir.exists() || !dir.isDirectory()) {
+            return;
+        }
 
-            log.info("Scanning for 3rd party plugins in directory: " + dir.getName());
+        LOG.info("Scanning for 3rd party plugins in directory: {}", dir.getName());
 
-            // find any .war files
-            File[] wars = dir.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return isWarFileName(name);
-                }
-            });
-            if (wars != null) {
-                for (File war : wars) {
+        // find any .war files
+        File[] wars = dir.listFiles((d, name) -> isWarFileName(name));
+        if (wars == null) {
+            return;
+        }
 
-                    // custom plugins must not use same context-path as hawtio
-                    String contextPath = "/" + war.getName();
-                    if (contextPath.endsWith(".war")) {
-                        contextPath = contextPath.substring(0, contextPath.length() - 4);
-                    }
-                    if (contextPath.equals(options.getContextPath())) {
-                        throw new IllegalArgumentException("3rd party plugin " + war.getName() + " cannot have same name as hawtio context path. Rename the plugin file to avoid the clash.");
-                    }
+        for (File war : wars) {
 
-                    WebAppContext plugin = new WebAppContext();
-                    plugin.setServer(handlers.getServer());
-                    plugin.setContextPath(contextPath);
-                    plugin.setWar(war.getAbsolutePath());
-                    // plugin.setParentLoaderPriority(true);
-                    plugin.setLogUrlOnStart(true);
-
-                    // need to have private sub directory for each plugin
-                    File pluginTempDir = new File(tempDir, war.getName());
-                    pluginTempDir.mkdirs();
-
-                    plugin.setTempDirectory(pluginTempDir);
-                    plugin.setThrowUnavailableOnStartupException(true);
-
-                    try {
-                        plugin.start();
-                        handlers.addHandler(plugin);
-
-                        log.info("Added 3rd party plugin with context-path: " + contextPath);
-                        System.out.println("Added 3rd party plugin with context-path: " + contextPath);
-                    } catch (Exception e) {
-                        log.warn("Failed to add and start 3rd party plugin with context-path: " + contextPath + " due " + e.getMessage(), e);
-                    }
-                }
+            // custom plugins must not use same context-path as hawtio
+            String contextPath = "/" + war.getName();
+            if (contextPath.endsWith(".war")) {
+                contextPath = contextPath.substring(0, contextPath.length() - 4);
+            }
+            if (contextPath.equals(options.getContextPath())) {
+                throw new IllegalArgumentException("3rd party plugin " + war.getName() + " cannot have same name as hawtio context path. Rename the plugin file to avoid the clash.");
             }
 
+            WebAppContext plugin = new WebAppContext();
+            plugin.setServer(handlers.getServer());
+            plugin.setContextPath(contextPath);
+            plugin.setWar(war.getAbsolutePath());
+            // plugin.setParentLoaderPriority(true);
+            plugin.setLogUrlOnStart(true);
+
+            // need to have private sub directory for each plugin
+            File pluginTempDir = new File(tempDir, war.getName());
+            pluginTempDir.mkdirs();
+
+            plugin.setTempDirectory(pluginTempDir);
+            plugin.setThrowUnavailableOnStartupException(true);
+
+            try {
+                plugin.start();
+                handlers.addHandler(plugin);
+
+                LOG.info("Added 3rd party plugin with context-path: {}", contextPath);
+                System.out.println("Added 3rd party plugin with context-path: " + contextPath);
+            } catch (Exception e) {
+                LOG.warn("Failed to add and start 3rd party plugin with context-path: " + contextPath + " due " + e.getMessage(), e);
+            }
         }
     }
 
