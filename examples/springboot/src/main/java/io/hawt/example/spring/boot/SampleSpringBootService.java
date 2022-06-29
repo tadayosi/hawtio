@@ -8,10 +8,13 @@ import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import org.slf4j.MDC;
+
 @SpringBootApplication
 public class SampleSpringBootService {
 
     public static void main(String[] args) {
+        MDC.put("test", "ENTESB-18286");
         SpringApplication.run(SampleSpringBootService.class, args);
     }
 
