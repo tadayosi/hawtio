@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hawtio/react": "^0.2.0-dev.6",
+    "@hawtio/react-plugins": "0.2.0-dev.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
@@ -41,5 +42,9 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@3.5.0",
+  "resolutions": {
+    "@hawtio/react": "portal:/home/tasato/projects/hawtio2/hawtio-next/packages/hawtio",
+    "@hawtio/react-plugins": "portal:/home/tasato/projects/hawtio2/hawtio-next/packages/plugins"
+  }
 }

@@ -1,10 +1,12 @@
-import { hawtio, Hawtio, registerPlugins } from '@hawtio/react'
+import { hawtio, Hawtio, registerCorePlugins } from '@hawtio/react'
+import { registerPlugins } from '@hawtio/react-plugins'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { configure } from './config'
 import { reportWebVitals } from './reportWebVitals'
 
 // Register builtin plugins
+registerCorePlugins()
 registerPlugins()
 
 hawtio

@@ -32,6 +32,10 @@ module.exports = {
               singleton: true,
               requiredVersion: dependencies['@hawtio/react'],
             },
+            '@hawtio/react-plugins': {
+              singleton: true,
+              requiredVersion: dependencies['@hawtio/react-plugins'],
+            },
           },
         }),
         new MonacoWebpackPlugin({

@@ -1790,6 +1790,7 @@ __metadata:
     "@craco/craco": ^7.1.0
     "@hawtio/backend-middleware": ^1.0.3
     "@hawtio/react": ^0.2.0-dev.6
+    "@hawtio/react-plugins": 0.2.0-dev.0
     monaco-editor-webpack-plugin: ^7.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -1798,12 +1799,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@hawtio/react@npm:^0.2.0-dev.6":
-  version: 0.2.0-dev.6
-  resolution: "@hawtio/react@npm:0.2.0-dev.6"
+"@hawtio/react-plugins@portal:/home/tasato/projects/hawtio2/hawtio-next/packages/plugins::locator=%40hawtio%2Fconsole-assembly%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@hawtio/react-plugins@portal:/home/tasato/projects/hawtio2/hawtio-next/packages/plugins::locator=%40hawtio%2Fconsole-assembly%40workspace%3A."
   dependencies:
     "@hawtio/camel-model": ^3.20.2-1
-    "@module-federation/utilities": ^1.4.1
+    "@hawtio/react": "workspace:^"
     "@patternfly/react-code-editor": ^4.82.113
     "@patternfly/react-core": ^4.276.8
     "@patternfly/react-table": ^4.113.0
@@ -1814,15 +1815,14 @@ __metadata:
     "@types/dagre-layout": ^0.8.2
     "@types/jest": ^29.5.0
     "@types/node": ^18.15.11
-    "@types/react": ^18.0.33
+    "@types/react": ^18.0.34
     "@types/react-dom": ^18.0.11
     "@types/react-router-dom": ^5.3.3
     dagre: ^0.8.5
-    eventemitter3: ^5.0.0
     jolokia.js: 1.7.2
     jquery: ^3.6.4
     js-logger: ^1.6.1
-    monaco-editor: ^0.37.0
+    monaco-editor: ^0.37.1
     react: ^18.2.0
     react-dom: ^18.2.0
     react-markdown: ^8.0.6
@@ -1830,15 +1830,46 @@ __metadata:
     react-router-dom: ^6.10.0
     react-split: ^2.0.14
     reactflow: ^11.6.1
+    typescript: ^4.9.5
+  peerDependencies:
+    "@patternfly/react-core": ^4.276.8
+    react: ^16.8 || ^17 || ^18
+    react-dom: ^16.8 || ^17 || ^18
+  languageName: node
+  linkType: soft
+
+"@hawtio/react@portal:/home/tasato/projects/hawtio2/hawtio-next/packages/hawtio::locator=%40hawtio%2Fconsole-assembly%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@hawtio/react@portal:/home/tasato/projects/hawtio2/hawtio-next/packages/hawtio::locator=%40hawtio%2Fconsole-assembly%40workspace%3A."
+  dependencies:
+    "@module-federation/utilities": ^1.5.0
+    "@patternfly/react-core": ^4.276.8
+    "@patternfly/react-table": ^4.113.0
+    "@testing-library/jest-dom": ^5.16.5
+    "@testing-library/react": ^14.0.0
+    "@testing-library/user-event": ^14.4.3
+    "@types/jest": ^29.5.0
+    "@types/node": ^18.15.11
+    "@types/react": ^18.0.34
+    "@types/react-dom": ^18.0.11
+    "@types/react-router-dom": ^5.3.3
+    eventemitter3: ^5.0.0
+    jolokia.js: 1.7.2
+    jquery: ^3.6.4
+    js-logger: ^1.6.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-markdown: ^8.0.6
+    react-router-dom: ^6.10.0
+    react-split: ^2.0.14
     superstruct: ^1.0.3
     typescript: ^4.9.5
   peerDependencies:
     "@patternfly/react-core": ^4.276.8
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
-  checksum: d3d7e6a4be8658113e4dba1515050a1b4c4575e5890c93b1ea29534ccd494127ea70e3cbaf87949efeaf0a96003eaaeb41d17ac1e1485ce967b64328acebe6c5
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@humanwhocodes/config-array@npm:^0.11.8":
   version: 0.11.8
@@ -2246,9 +2277,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/utilities@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@module-federation/utilities@npm:1.4.1"
+"@module-federation/utilities@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@module-federation/utilities@npm:1.5.0"
   peerDependencies:
     next: ^12 || ^13
     react: ^16 || ^17 || ^18
@@ -2261,7 +2292,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 7f5f67aa2b75f9a4958e72a8fa34b8dd9277c21aedc7885a223ecf40b4f29d813eeea640cdc838860c85d40c7733413d1d1e687f0cd8567a535ad306bbb82be3
+  checksum: 4bd0bd96efe9be816df93da5d17f6fe73c0fa51be778804a4886a9e7cbd2a8ade9a3f0d4fa22fe8fa72e935e40090f7f6aa719fd467e0babefda3c4a93918c2d
   languageName: node
   linkType: hard
 
@@ -2322,19 +2353,19 @@ __metadata:
   linkType: hard
 
 "@patternfly/react-code-editor@npm:^4.82.113":
-  version: 4.82.115
-  resolution: "@patternfly/react-code-editor@npm:4.82.115"
+  version: 4.82.116
+  resolution: "@patternfly/react-code-editor@npm:4.82.116"
   dependencies:
-    "@patternfly/react-core": ^4.276.8
+    "@patternfly/react-core": ^4.276.9
     "@patternfly/react-icons": ^4.93.6
-    "@patternfly/react-styles": ^4.92.6
+    "@patternfly/react-styles": ^4.92.7
     react-dropzone: 9.0.0
     tslib: ^2.0.0
   peerDependencies:
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
     react-monaco-editor: ^0.51.0
-  checksum: ed7ea6742106e3f912e129c205c15346d0831631a1da3e84d74ce052de86ae4fc1775bd6b8312229866ceb2e4fbd852adc787b218bf95b6610e509a3732b7ad2
+  checksum: d17f45b6e0b0ff50dcc7e63392f2d48380d6eae3c8302236bf7ff58b58ae849e1e8659dba1c976a08f988234ea1d6450e5405ae75b010a1ebab2bfc27ca2bc67
   languageName: node
   linkType: hard
 
@@ -2356,6 +2387,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@patternfly/react-core@npm:^4.276.9":
+  version: 4.276.9
+  resolution: "@patternfly/react-core@npm:4.276.9"
+  dependencies:
+    "@patternfly/react-icons": ^4.93.6
+    "@patternfly/react-styles": ^4.92.7
+    "@patternfly/react-tokens": ^4.94.6
+    focus-trap: 6.9.2
+    react-dropzone: 9.0.0
+    tippy.js: 5.1.2
+    tslib: ^2.0.0
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18
+    react-dom: ^16.8 || ^17 || ^18
+  checksum: 583c8d5285fb745196844549aa330a7f2fc8bd951c6f2374f584132a7030a23210ab29605fc02de0c7ae223344adb6705046ec53cf171fd178c2a8c5d01b78b5
+  languageName: node
+  linkType: hard
+
 "@patternfly/react-icons@npm:^4.93.6":
   version: 4.93.6
   resolution: "@patternfly/react-icons@npm:4.93.6"
@@ -2370,6 +2419,13 @@ __metadata:
   version: 4.92.6
   resolution: "@patternfly/react-styles@npm:4.92.6"
   checksum: fef3317cf2c6f79afea3c1903372ac62a0e753b239f360c4c9896dbdbe98a2d72abd62e047cd29b6569a1c7d3654110cd3f3934a2268d01d1891855eeff2b72a
+  languageName: node
+  linkType: hard
+
+"@patternfly/react-styles@npm:^4.92.7":
+  version: 4.92.7
+  resolution: "@patternfly/react-styles@npm:4.92.7"
+  checksum: 5ff91a424d818504a48a081450d2acd8bd4a285742f7ca6670de094c683125bbb746d25950613b07c3c0fefd345c2b3e022b8abd2ca01ccef0bc76f89413d75e
   languageName: node
   linkType: hard
 
@@ -3573,14 +3629,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.0.33":
-  version: 18.0.33
-  resolution: "@types/react@npm:18.0.33"
+"@types/react@npm:^18.0.34":
+  version: 18.0.34
+  resolution: "@types/react@npm:18.0.34"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 4fbd2b2b6a26378bdfde121081a6406ec2d39e4ba87ea5f6897ab7bb2198713165e6fd703ad4ed7ba1d4f23ef54a4c9f108f3105c7ed8e136411ee6bdebc5669
+  checksum: 60d2766e7644ec480075bbb154bf8fb8476089466b643662ef59964e27cae2d8c71fd9c717a4dfa9627c3e050fa2ae866d10d16f66b4509058d1bfe2a564b18c
   languageName: node
   linkType: hard
 
@@ -10231,10 +10287,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"monaco-editor@npm:^0.37.0":
-  version: 0.37.0
-  resolution: "monaco-editor@npm:0.37.0"
-  checksum: c66bce4fbb2d6a41c78a13723928b3abbbd6df9d9d4bb855277d4919f7a1364ce36a4e75168b0bdb5eae20ca99cbf53cae16a8526ee4ccc4566755a0666d27d7
+"monaco-editor@npm:^0.37.1":
+  version: 0.37.1
+  resolution: "monaco-editor@npm:0.37.1"
+  checksum: f2ac123d3044a1386d36ba52bb617ad18fb1c745d515a63258858b41c91bb68b71b57c7e5aff3fc2b3226b22c12ca3ad5b14c117babc85eebcf80317cb10691b
   languageName: node
   linkType: hard
 
