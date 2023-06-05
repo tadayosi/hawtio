@@ -1,7 +1,18 @@
 package io.hawt.springboot.keycloak;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.keycloak.OAuth2Constants;
+import org.keycloak.adapters.OAuthRequestAuthenticator;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
+import org.keycloak.adapters.springsecurity.authentication.SpringSecurityRequestAuthenticator;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
+import org.keycloak.common.util.Base64Url;
+import org.keycloak.common.util.KeycloakUriBuilder;
+import org.keycloak.common.util.SecretGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +60,44 @@ public class HawtioKeycloakConfiguration extends KeycloakWebSecurityConfigurerAd
     @Bean
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
         return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+    }
+
+    /**
+     * Workaround: TODO JIRA
+     */
+    @Override
+    protected KeycloakAuthenticationProcessingFilter keycloakAuthenticationProcessingFilter() throws Exception {
+        KeycloakAuthenticationProcessingFilter filter = super.keycloakAuthenticationProcessingFilter();
+        filter.setRequestAuthenticatorFactory((facade, request, deployment, tokenStore, sslRedirectPort) ->
+            new SpringSecurityRequestAuthenticator(facade, request, deployment, tokenStore, sslRedirectPort) {
+                @Override
+                protected OAuthRequestAuthenticator createOAuthAuthenticator() {
+                    return new OAuthRequestAuthenticator(this, facade, deployment, sslRedirectPort, tokenStore) {
+                        @Override
+                        protected String getRedirectUri(String state) {
+                            String uri = super.getRedirectUri(state);
+                            if (!deployment.isPkce()) {
+                                return uri;
+                            }
+
+                            // PKCE support
+                            try {
+                                String codeVerifier = SecretGenerator.getInstance().randomString(128);
+                                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                                md.update(codeVerifier.getBytes(StandardCharsets.ISO_8859_1));
+                                String codeChallenge = Base64Url.encode(md.digest());
+                                KeycloakUriBuilder uriBuilder = KeycloakUriBuilder.fromUri(uri);
+                                uriBuilder.queryParam(OAuth2Constants.CODE_CHALLENGE, codeChallenge);
+                                uriBuilder.queryParam(OAuth2Constants.CODE_CHALLENGE_METHOD, "S256");
+                                return uriBuilder.buildAsString();
+                            } catch (NoSuchAlgorithmException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    };
+                }
+            });
+        return filter;
     }
 
     @Override
