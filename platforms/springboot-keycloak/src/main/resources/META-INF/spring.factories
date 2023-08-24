@@ -1,3 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 io.hawt.springboot.keycloak.HawtioKeycloakConfiguration,\
 io.hawt.springboot.keycloak.KeycloakConfigResolverConfiguration
+spring.autoconfigure.exclude=\
+org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration,\
+org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration

@@ -3,6 +3,7 @@ package io.hawt.springboot.keycloak;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
@@ -19,6 +20,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @KeycloakConfiguration
 @EnableWebSecurity
 @PropertySource("classpath:/io/hawt/springboot/keycloak/application.properties")
+@ConditionalOnExpression("${hawtio.authenticationEnabled:true} and ${hawtio.keycloakEnabled:true}")
 public class HawtioKeycloakConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
     /**
