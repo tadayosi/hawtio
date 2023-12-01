@@ -1,6 +1,5 @@
 package io.hawt.jmx;
 
-import java.io.Serial;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.management.MBeanServerNotification;
@@ -51,12 +50,12 @@ public class PluginRegistry extends JmxTreeWatcher implements PluginRegistryMBea
 
     protected NotificationFilter getNotificationFilter() {
         return new NotificationFilter() {
-            @Serial
             private static final long serialVersionUID = 1L;
 
             @Override
             public boolean isNotificationEnabled(Notification notification) {
-                if (notification instanceof MBeanServerNotification n) {
+                if (notification instanceof MBeanServerNotification) {
+                    MBeanServerNotification n = (MBeanServerNotification) notification;
                     return comparator.apply(n.getMBeanName());
                 }
                 return false;

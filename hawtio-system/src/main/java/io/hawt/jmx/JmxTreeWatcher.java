@@ -1,6 +1,5 @@
 package io.hawt.jmx;
 
-import java.io.Serial;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -102,7 +101,6 @@ public class JmxTreeWatcher implements JmxTreeWatcherMBean {
 
     protected NotificationFilter getNotificationFilter() {
         return new NotificationFilter() {
-            @Serial
             private static final long serialVersionUID = 1L;
 
             @Override
