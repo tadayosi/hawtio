@@ -102,6 +102,7 @@
       <artifactId>quarkus-jackson</artifactId>
     </dependency>
     <!-- Deploying to Kubernetes -->
+    <!--
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-kubernetes</artifactId>
@@ -109,6 +110,12 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-container-image-jib</artifactId>
+    </dependency>
+    -->
+    <!-- Deploying to OpenShift -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-openshift</artifactId>
     </dependency>
 
     <!-- Hawtio -->
