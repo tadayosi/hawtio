@@ -1,3 +1,2 @@
-{"id":"eae5cfa1-61c3-4e5c-a1bf-b8b7ec6e91f3","ts":"2026-09-09T07:41:40.921Z","path":"/Users/tasato/projects/hawtio/hawtio/console/webpack.config.cjs","version":"1.0.0","taskID":"054e3cfc-2fc7-43d1-a995-4308552188cb"}
-{"id":"3e897e64-8b78-4999-b832-41985b732e2e","ts":"2026-09-09T07:42:52.427Z","path":"/Users/tasato/projects/hawtio/hawtio/console-minimal/webpack.config.cjs","version":"1.0.0","taskID":"054e3cfc-2fc7-43d1-a995-4308552188cb"}
-{"id":"e1423586-18be-4434-b6dd-86bd746864a4","ts":"2026-09-09T07:43:11.645Z","path":"/Users/tasato/projects/hawtio/hawtio/examples/sample-plugin/webpack.config.cjs","version":"1.0.0","taskID":"054e3cfc-2fc7-43d1-a995-4308552188cb"}
+{"id":"261274b2-9cb4-4b34-ac94-8ef02a2dfce5","fileUri":"file:///Users/tasato/projects/hawtio/hawtio/AGENTS.md","repoName":"hawtio/hawtio","branchName":"main","toolName":"apply_diff","startLine":25,"endLine":25,"taskId":null,"createdAt":1789026570469}
+{"id":"6a3439b4-d3bd-448a-93f0-d6981a20c4d3","fileUri":"file:///Users/tasato/projects/hawtio/hawtio/AGENTS.md","repoName":"hawtio/hawtio","branchName":"main","toolName":"apply_diff","startLine":24,"endLine":24,"taskId":null,"createdAt":1789025909854}
